@@ -1,7 +1,7 @@
 {
   "name": "reddit-reader",
   "version": "0.0.1",
-  "description": "Reddit reader (with online/offline modes)",
+  "description": "Reddit online/offline reader",
   "main": "index.js",
   "author": "programulya",
   "license": "MIT",
