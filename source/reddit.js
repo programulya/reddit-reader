@@ -20,6 +20,7 @@ var MenuList = React.createClass({
 
     render: function () {
         var self = this;
+        var initItem = self.props.initItem;
 
         var items = this.props.items.map(function (item) {
             return (
@@ -41,18 +42,6 @@ var MenuList = React.createClass({
 
 // Posts
 var PostList = React.createClass({
-    onGetCommentsClicked: function (commentLink) {
-        var self = this;
-        var name = 'fn' + Date.now();
-        var script = document.createElement('script');
-        script.src = this.props.link + '?jsonp=' + name;
-
-        window[name] = function (jsonData) {
-            self.setState({commentItems: jsonData.data.children});
-            delete window[name];
-        };
-    },
-
     ticksToHours: function (ticks) {
         var minutes = 1000 * 60;
         var hours = minutes * 60;
@@ -99,8 +88,8 @@ var PostList = React.createClass({
                             <label className="post-subreddit"> to {item.data.subreddit}</label>
                         </div>
                         <div className="post-comments-counter">
-                            <CommentButton onHeaderText={item.data.num_comments} link={commentLink} onGetCommentsClicked={self.onGetCommentsClicked} />
-                            <Parent caption={item.data.num_comments}/>
+
+                            <CommentsButton url={commentLink} caption={item.data.num_comments}/>
                         </div>
                     </div>
                 </div>
@@ -117,10 +106,6 @@ var PostList = React.createClass({
 
 // Comments
 var CommentItem = React.createClass({
-    onClick: function () {
-        this.props.itemSelected(this.props.item);
-    },
-
     render: function () {
         return (
             <li>
@@ -150,38 +135,35 @@ var CommentList = React.createClass({
     }
 });
 
-var CommentButton = React.createClass({
-    render: function () {
-        return (
-            <p onClick={this.props.onGetCommentsClicked(this.props.link)}>{this.props.onHeaderText} comments</p>
-        )
-    }
-});
-
-var Child = React.createClass({
-    render: function () {
-        return <p onClick={this.handleClick} ref="myButton" type="button">{this.handleTitleChange}</p>;
-    },
-
-    handleClick: function () {
-        this.props.onClick(this);
-    },
-
-    handleTitleChange: function () {
-        this.props.caption(this);
-    }
-});
-
-var Parent = React.createClass({
-    render: function () {
-        return (
-            <Child onClick={this.handleClick} caption={this.props.getCaption}/>
-        );
+var CommentsButton = React.createClass({
+    getInitialState: function () {
+        return ({
+            comments: []
+        });
     },
 
     handleClick: function (childComponent) {
-        alert(childComponent.refs.myButton);
-        alert('The Child button text is: "' + childComponent.refs.myButton.getDOMNode().innerText + '"');
+        var self = this;
+        var name = 'fn' + Date.now();
+        var script = document.createElement('script');
+        script.src = this.props.url + '?jsonp=' + name;
+
+        window[name] = function (jsonData) {
+            self.setState({comments: jsonData});
+            delete window[name];
+        };
+
+        document.head.appendChild(script);
+    },
+
+    render: function() {
+        var self = this;
+        return (
+            <div>
+                <p onClick={this.handleClick}>{self.props.caption} comments</p>
+                <CommentList items={self.state.comments}/>
+            </div>
+        )
     }
 });
 
@@ -202,6 +184,7 @@ var App = React.createClass({
         };
 
         document.head.appendChild(script);
+        this.loadFirstPostItems(this.state.initItem);
     },
 
     getInitialState: function () {
@@ -216,12 +199,13 @@ var App = React.createClass({
         var url = redditUrl + subReddit;
 
         return ({
-            activeNavigationUrl: '',
+            activeNavigationUrl: url + '/hot.json',
             menuItems: [{id: 'hot', url: url + '/hot.json'},
                 {id: 'new', url: url + '/new.json'},
                 {id: 'rising', url: url + '/rising.json'},
                 {id: 'controversial', url: url + '/controversial.json'},
                 {id: 'top', url: url + '/top.json'}],
+            initItem: {id: 'hot', url: url + '/hot.json'},
             postItems: []
         });
     },
@@ -239,6 +223,19 @@ var App = React.createClass({
                 </div>
             </div>
         );
+    },
+
+    loadFirstPostItems: function(item) {
+        var self = this;
+        var name = 'fn' + Date.now();
+        var script = document.createElement('script');
+        script.src = item.url + '?limit=25&sort=top&jsonp=' + name;
+
+        window[name] = function (jsonData) {
+            self.setState({postItems: jsonData.data.children});
+            delete window[name];
+        };
+        document.head.appendChild(script);
     },
 
     setSelectedItem: function (item) {
