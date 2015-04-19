@@ -69,9 +69,11 @@ var PostList = React.createClass({
         var self = this;
 
         var storyNodes = this.props.items.map(function (item) {
+            var redditUrl = 'http://www.reddit.com';
             var hours = self.ticksToHours(item.data.created_utc);
-            var commentLink = 'http://www.reddit.com' + item.data.permalink + '.json';
-            var isThumbnail = item.data.thumbnail.indexOf('http') === 0;
+            var commentLink = redditUrl + item.data.permalink + '.json';
+            var thumbnailLink = item.data.thumbnail;
+            var isThumbnail = thumbnailLink.substr(thumbnailLink.length - 4) === '.jpg';
 
             return (
                 <div className="post" key={item.data.url}>
@@ -79,8 +81,8 @@ var PostList = React.createClass({
                         <p>{item.data.score}</p>
                     </div>
 
-                    <div className={isThumbnail ? 'thumbnail' : 'hidden'}>
-                        <img src={item.data.thumbnail}></img>
+                    <div className={isThumbnail === true ? 'thumbnail' : 'hidden'}>
+                        <img src={isThumbnail === true ? item.data.thumbnail : ''}></img>
                     </div>
 
                     <div className="post-info">
@@ -92,7 +94,7 @@ var PostList = React.createClass({
                         </div>
                         <div className="post-author">
                             <span>
-                                Submitted {hours} hours ago by <label className="post-author-name">{item.data.author}</label>
+                                Submitted {hours} hours ago by <b className="post-author-name">{item.data.author}</b>
                             </span>
                             <label className="post-subreddit"> to {item.data.subreddit}</label>
                         </div>
@@ -165,7 +167,7 @@ var Child = React.createClass({
         this.props.onClick(this);
     },
 
-    handleTitleChange: function() {
+    handleTitleChange: function () {
         this.props.caption(this);
     }
 });
@@ -181,12 +183,11 @@ var Parent = React.createClass({
         alert(childComponent.refs.myButton);
         alert('The Child button text is: "' + childComponent.refs.myButton.getDOMNode().innerText + '"');
     }
-
-
 });
 
 // App
 var App = React.createClass({
+
     componentDidMount: function () {
         var self = this;
         var name = 'fn' + Date.now();
@@ -204,15 +205,25 @@ var App = React.createClass({
     },
 
     getInitialState: function () {
+        var redditUrl = 'http://www.reddit.com';
+        var query = window.location.search;
+
+        var subReddit = '';
+        if (query.indexOf('?/') === 0) {
+            subReddit = '/r/' + query.substring(2);
+        }
+
+        var url = redditUrl + subReddit;
+
         return ({
             activeNavigationUrl: '',
-            menuItems: [{id: 'hot', url: 'http://www.reddit.com/hot.json'},
-                {id: 'new', url: 'http://www.reddit.com/new.json'},
-                {id: 'rising', url: 'http://www.reddit.com/rising.json'},
-                {id: 'controversial', url: 'http://www.reddit.com/controversial.json'},
-                {id: 'top', url: 'http://www.reddit.com/top.json'}],
+            menuItems: [{id: 'hot', url: url + '/hot.json'},
+                {id: 'new', url: url + '/new.json'},
+                {id: 'rising', url: url + '/rising.json'},
+                {id: 'controversial', url: url + '/controversial.json'},
+                {id: 'top', url: url + '/top.json'}],
             postItems: [],
-            initItem: {id: 'hot', url: 'http://www.reddit.com/hot.json'}
+            initItem: {id: 'hot', url: url + '/hot.json'}
         });
     },
 
