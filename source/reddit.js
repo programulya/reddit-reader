@@ -222,8 +222,7 @@ var App = React.createClass({
                 {id: 'rising', url: url + '/rising.json'},
                 {id: 'controversial', url: url + '/controversial.json'},
                 {id: 'top', url: url + '/top.json'}],
-            postItems: [],
-            initItem: {id: 'hot', url: url + '/hot.json'}
+            postItems: []
         });
     },
 
@@ -235,7 +234,6 @@ var App = React.createClass({
                     <h1>Reddit reader</h1>
                     <MenuList activeUrl={this.state.activeNavigationUrl}
                         items={this.state.menuItems}
-                        initItem={this.state.initItem}
                         itemSelected={this.setSelectedItem} />
                     <PostList items={this.state.postItems} />
                 </div>
