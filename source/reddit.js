@@ -42,7 +42,6 @@ var MenuList = React.createClass({
 // Posts
 var PostList = React.createClass({
     onGetCommentsClicked: function (commentLink) {
-        //console.log(commentLink);
         var self = this;
         var name = 'fn' + Date.now();
         var script = document.createElement('script');
@@ -55,7 +54,15 @@ var PostList = React.createClass({
     },
 
     ticksToHours: function (ticks) {
-        return ticks;
+        var minutes = 1000 * 60;
+        var hours = minutes * 60;
+
+        var d = new Date();
+        var currentTicks = d.getTime();
+        var startTicks = new Date(ticks * 1000);
+        var deltaTicks = currentTicks - startTicks;
+
+        return Math.round(deltaTicks / hours);
     },
 
     render: function () {
@@ -63,8 +70,7 @@ var PostList = React.createClass({
 
         var storyNodes = this.props.items.map(function (item) {
             var hours = self.ticksToHours(item.data.created_utc);
-            var commentLinkBase = 'http://www.reddit.com';
-            var commentLink = commentLinkBase + item.data.permalink + '.json';
+            var commentLink = 'http://www.reddit.com' + item.data.permalink + '.json';
             var isThumbnail = item.data.thumbnail.indexOf('http') === 0;
 
             return (
@@ -86,13 +92,13 @@ var PostList = React.createClass({
                         </div>
                         <div className="post-author">
                             <span>
-                                Submitted {hours} hours ago by <label className="post-author-name">{item.data.author}</label>
+                                Submitted {hours} hours ago by
+                                <label className="post-author-name">{item.data.author}</label>
                             </span>
                             <label className="post-subreddit"> to {item.data.subreddit}</label>
                         </div>
                         <div className="post-comments-counter">
                             <CommentButton onHeaderText={item.data.num_comments} link={commentLink} onGetCommentsClicked={self.onGetCommentsClicked} />
-                            //<p onClick={this.handleClick}>{item.data.num_comments} comments</p>
                             <Parent caption={item.data.num_comments}/>
                         </div>
                     </div>
@@ -144,16 +150,16 @@ var CommentList = React.createClass({
 });
 
 var CommentButton = React.createClass({
-    render: function(){
+    render: function () {
         return (
-            <p onClick={this.props.onGetCommentsClicked(this.props.link)}>{this.props.onHeaderText}</p>
+            <p onClick={this.props.onGetCommentsClicked(this.props.link)}>{this.props.onHeaderText} comments</p>
         )
     }
 });
 
 var Child = React.createClass({
     render: function () {
-        return <button onClick={this.handleClick} ref="myButton" type="button"> Click Me </button>;
+        return <p onClick={this.handleClick} ref="myButton" type="button"> Click Me </p>;
     },
 
     handleClick: function () {
@@ -169,6 +175,7 @@ var Parent = React.createClass({
     },
 
     handleClick: function (childComponent) {
+        alert(childComponent.refs.myButton);
         alert('The Child button text is: "' + childComponent.refs.myButton.getDOMNode().innerText + '"');
     }
 });
@@ -199,7 +206,8 @@ var App = React.createClass({
                 {id: 'rising', url: 'http://www.reddit.com/rising.json'},
                 {id: 'controversial', url: 'http://www.reddit.com/controversial.json'},
                 {id: 'top', url: 'http://www.reddit.com/top.json'}],
-            postItems: []
+            postItems: [],
+            initItem: {id: 'hot', url: 'http://www.reddit.com/hot.json'}
         });
     },
 
@@ -207,9 +215,11 @@ var App = React.createClass({
         return (
             <div>
                 <div>
+                    <img src="images/reddit-icon.png" className="image-header"></img>
                     <h1>Reddit reader</h1>
                     <MenuList activeUrl={this.state.activeNavigationUrl}
                         items={this.state.menuItems}
+                        initItem={this.state.initItem}
                         itemSelected={this.setSelectedItem} />
                     <PostList items={this.state.postItems} />
                 </div>

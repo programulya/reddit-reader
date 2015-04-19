@@ -2,8 +2,8 @@
 
 body {
     font: 14px "Tinos", serif;
-    background: #ddd;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+    background: #fff6ed;
+    text-shadow: 0 1px 0 rgba(255, 249, 234, 0.50);
 }
 
 body > header,
@@ -20,20 +20,33 @@ h1, h2, h3 {
     font-weight: 700;
     letter-spacing: -.05em;
     margin: 5px;
+    padding: 5px;
+    color: #ff0921;
 }
 
 h1 {
-    font-size: 3em;
+    font-size: 5em;
+    background-color: rgba(255, 255, 255, .5);
 }
 
 h2 {
     font-size: 2em;
-    text-align: center;
 }
 
 h3 {
     font-size: 1.2em;
 }
+
+.image-header {
+    margin: 5px;
+    padding: 5px;
+    height: 5em;
+    width: 5em;
+    float: left;
+    display: inline-block;
+}
+
+/* Menu */
 
 .menu {
     margin: 5px;
@@ -45,30 +58,34 @@ h3 {
 }
 
 .menu li {
-    margin-left: 5px;
+    font-size: 1.4em;
+    margin-left: 15px;
     text-transform: uppercase;
     display: inline;
     text-align: center;
-    color: #db3340;
-    border: 1px solid rgba(0, 1, 1, .1);
-    box-shadow: 0 4px 3px 0 rgba(0, 0, 0, .1), 0 0 10px rgba(255, 93, 14, 0.30);
-    border-radius: 5px;
+    color: rgba(55, 69, 70, 0.84);
 }
 
-.menu li a {
-    color: #ff184b;
-    font-size: 2em;
-    text-decoration: none;
+.menu li:hover {
+    color: #9ab8b9;
+    cursor: pointer;
 }
 
 .menu .selected {
-    background-color: #fffbb9;
+    color: #ff0921;
 }
+
+/* Post */
 
 .post {
     min-height: 3em;
     margin: 5px;
     padding: 5px;
+}
+
+.post a {
+    color: #000000;
+    font-style: oblique;
 }
 
 .score {
@@ -87,9 +104,9 @@ h3 {
     display: inline-block;
 }
 
-.thumbnail img{
-    width: 40px;
-    height: 40px;
+.thumbnail img {
+    width: 3em;
+    height: 3em;
 }
 
 .hidden {
@@ -110,7 +127,7 @@ h3 {
 .post-domain {
     margin-left: 5px;
     font-size: 0.8em;
-    color: rgba(31, 37, 38, 0.35);
+    color: #a8a8a8;
 }
 
 .post-author {
@@ -119,20 +136,22 @@ h3 {
 }
 
 .post-author-name {
-    color: #db3340;
+    color: #ff0921;
 }
 
-.post-subreddit{
-    color: #ffff00;
+.post-subreddit {
+    color: #374546;
 }
 
 .post-comments-counter {
-    color: #9061b2;
+    color: #374546;
 }
 
-@media (min-width: 570px) {
+/* Media */
+
+@media (max-width: 570px) {
     h1 {
-        font-size: 5em;
+        font-size: 3em;
     }
 
     h2 {
@@ -141,5 +160,19 @@ h3 {
 
     h3 {
         font-size: 2em;
+    }
+
+    .image-header {
+        height: 3em;
+        width: 3em;
+    }
+
+    .menu li {
+        font-size: 1em;
+    }
+
+    .thumbnail img {
+        width: 2em;
+        height: 2em;
     }
 }
