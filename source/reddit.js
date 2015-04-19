@@ -92,8 +92,7 @@ var PostList = React.createClass({
                         </div>
                         <div className="post-author">
                             <span>
-                                Submitted {hours} hours ago by
-                                <label className="post-author-name">{item.data.author}</label>
+                                Submitted {hours} hours ago by <label className="post-author-name">{item.data.author}</label>
                             </span>
                             <label className="post-subreddit"> to {item.data.subreddit}</label>
                         </div>
@@ -159,18 +158,22 @@ var CommentButton = React.createClass({
 
 var Child = React.createClass({
     render: function () {
-        return <p onClick={this.handleClick} ref="myButton" type="button"> Click Me </p>;
+        return <p onClick={this.handleClick} ref="myButton" type="button">{this.handleTitleChange}</p>;
     },
 
     handleClick: function () {
         this.props.onClick(this);
+    },
+
+    handleTitleChange: function() {
+        this.props.caption(this);
     }
 });
 
 var Parent = React.createClass({
     render: function () {
         return (
-            <Child onClick={this.handleClick} caption={this.getCaption}/>
+            <Child onClick={this.handleClick} caption={this.props.getCaption}/>
         );
     },
 
@@ -178,6 +181,8 @@ var Parent = React.createClass({
         alert(childComponent.refs.myButton);
         alert('The Child button text is: "' + childComponent.refs.myButton.getDOMNode().innerText + '"');
     }
+
+
 });
 
 // App
