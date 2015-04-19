@@ -186,6 +186,7 @@ h3 {
 
     .menu li {
         font-size: 1em;
+        margin-left: 5px;
     }
 
     .post-info {
