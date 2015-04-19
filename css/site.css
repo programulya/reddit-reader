@@ -67,6 +67,7 @@ h3 {
     display: inline;
     text-align: center;
     color: #000000;
+    cursor: pointer;
 }
 
 .menu li:hover {
