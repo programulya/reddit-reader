@@ -46,7 +46,7 @@ var app = app || {};
         }
     });
 
-// Posts
+    // Posts
     var PostList = React.createClass({
         ticksToHours: function (ticks) {
             var minutes = 1000 * 60;
@@ -110,7 +110,7 @@ var app = app || {};
         }
     });
 
-// Comments
+    // Comments
     var CommentItem = React.createClass({
         render: function () {
             var isComment = this.props.kind !== 'more';
@@ -181,7 +181,7 @@ var app = app || {};
         }
     });
 
-// App
+    // App
     var App = React.createClass({
         componentDidMount: function () {
             var self = this;
