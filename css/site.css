@@ -167,6 +167,28 @@ h3 {
     cursor: pointer;
 }
 
+/* Comments */
+
+.post-text {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.comment {
+    margin-top: 15px;
+}
+
+.comment-list {
+    list-style: none;
+}
+
+.comment-author {
+    color: #ff0921;
+    font-style: italic;
+}
+
+.comment-text {
+}
+
 /* Media */
 
 @media (max-width: 570px) {

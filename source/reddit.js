@@ -20,7 +20,6 @@ var MenuList = React.createClass({
 
     render: function () {
         var self = this;
-        var initItem = self.props.initItem;
 
         var items = this.props.items.map(function (item) {
             return (
@@ -107,9 +106,12 @@ var PostList = React.createClass({
 // Comments
 var CommentItem = React.createClass({
     render: function () {
+        var isComment = this.props.kind !== 'more';
+
         return (
-            <li>
-                {this.props.item.id}
+            <li className={isComment === true ? 'comment' : 'hidden'}>
+                <div className="comment-author">{this.props.author}:</div>
+                <div className="comment-text">{this.props.item}</div>
             </li>
         );
     }
@@ -118,16 +120,22 @@ var CommentItem = React.createClass({
 var CommentList = React.createClass({
     render: function () {
         var self = this;
+        var post = self.props.items[0];
+        var commentsAll = this.props.items[1];
+        var text = (post == null) ? [] : post.data.children[0].data.selftext;
+        var comments = (commentsAll == null) ? [] : commentsAll.data.children;
 
-        var items = this.props.items.map(function (item) {
+        console.log(comments);
+        var items = comments.map(function (item) {
             return (
-                <CommentItem key={item.id} item={item}/>
+                <CommentItem author={item.data.author} item={item.data.body} kind={item.kind}/>
             );
         });
 
         return (
             <div>
-                <ul>
+                <div className="post-text">{text}</div>
+                <ul className="comment-list">
                     {items}
                 </ul>
             </div>
@@ -156,7 +164,7 @@ var CommentsButton = React.createClass({
         document.head.appendChild(script);
     },
 
-    render: function() {
+    render: function () {
         var self = this;
         return (
             <div>
@@ -169,7 +177,6 @@ var CommentsButton = React.createClass({
 
 // App
 var App = React.createClass({
-
     componentDidMount: function () {
         var self = this;
         var name = 'fn' + Date.now();
@@ -225,7 +232,7 @@ var App = React.createClass({
         );
     },
 
-    loadFirstPostItems: function(item) {
+    loadFirstPostItems: function (item) {
         var self = this;
         var name = 'fn' + Date.now();
         var script = document.createElement('script');
