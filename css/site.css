@@ -167,12 +167,6 @@ h3 {
     cursor: pointer;
 }
 
-.post-comments-counter a:hover, a:focus {
-    color: #9ab8b9;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
 /* Comments */
 
 .post-text {
