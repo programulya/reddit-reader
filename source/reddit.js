@@ -244,6 +244,8 @@ var app = app || {};
             var script = document.createElement('script');
             script.src = item.url + '?limit=25&sort=top&jsonp=' + name;
 
+            var items = utils.store(item.url);
+
             if((typeof items != "undefined" && items != null && items.length > 0) && navigator.onLine == false) {
                 self.setState({postItems: items});
             } else {
