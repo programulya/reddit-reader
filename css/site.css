@@ -78,6 +78,7 @@ h3 {
 
 .menu .selected {
     color: #ff0921;
+    cursor: pointer;
 }
 
 /* Post */
@@ -163,6 +164,7 @@ h3 {
 
 .post-comments-counter {
     color: rgba(55, 69, 70, 0.84);
+    cursor: pointer;
 }
 
 /* Media */
@@ -188,6 +190,11 @@ h3 {
     .menu li {
         font-size: 1em;
         margin-left: 5px;
+    }
+
+    .menu li:hover {
+        color: #ff0921;
+        cursor: pointer;
     }
 
     .post-info {
